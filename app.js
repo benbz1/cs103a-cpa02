@@ -14,7 +14,8 @@ const session = require("express-session"); // to handle sessions using cookies
 const debug = require("debug")("personalapp:server"); 
 const layouts = require("express-ejs-layouts");
 const axios = require("axios")
-
+const dotenv = require("dotenv")
+dotenv.config()
 // *********************************************************** //
 //  Loading models
 // *********************************************************** //
@@ -36,10 +37,8 @@ const courses = require('./public/data/courses20-21.json')
 
 const mongoose = require( 'mongoose' );
 //const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
-const mongodb_URI = 'mongodb+srv://ben:123@cluster0.v4e5f.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-//'mongodb+srv://eshkolnik1:Motocar2001$hai@cluster0.hqfpf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-//mongodb+srv://cs103a:<password>@cluster0.kgugl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
+const mongodb_URI = process.env.CONNECTION_STRING
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
 // fix deprecation warnings
 mongoose.set('useFindAndModify', false); 
@@ -136,7 +135,6 @@ app.get('/urls',
   app.post('/urls', isLoggedIn, async (req,res) => {
     let userId = res.locals.user._id;
     //check this user's usage, not let them post another url if they are past 100 url's to protect against nefarious purposes
-    const u = await User.findOne({_id: req.user.id})
     await ShortUrl.create({userId:userId, full: req.body.fullUrl})
     res.redirect('/urls')
 })
