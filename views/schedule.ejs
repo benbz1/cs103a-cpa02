@@ -1,0 +1,35 @@
+<!--
+    Added flex boxes to schedule.ejs
+-->
+
+<div class="d-flex flex-wrap text-center overflow-scroll">
+    <% for (course of courses){%>
+        <div class="p-3 m-3 border border-primary bg-light">
+            <a href="/schedule/remove/<%= course._id %>">X</a>
+            <%= course['subject'] %>
+            <%= course.coursenum %>
+            <%= course.name %>
+            <%= course.term %>
+            <div class="mb-1">
+                Enrollment: <%=course.enrolled %>,
+                Limit: <%=course.limit || 999 %>,
+                Waitlist: <%= course.waiting %>
+                <br>
+                <!--Changed course.times to course.strTimes-->
+                Times: <%= course.strTimes %>
+             </div>
+             <div class="">
+                 <em><%=course.details %></em>
+             </div>
+             <div class="p-3">
+                 <%=course.description %>
+             </div>
+        </div>
+    <% }%>
+    </div>
+
+<!--
+    <pre>
+        <%= JSON.stringify(courses,null,5) %>
+    </pre>
+-->
