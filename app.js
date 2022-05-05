@@ -21,6 +21,8 @@ const axios = require("axios")
 const ToDoItem = require("./models/ToDoItem")
 const Course = require('./models/Course')
 const Schedule = require('./models/Schedule')
+const ShortUrl = require('./models/shortUrl')
+
 
 // *********************************************************** //
 //  Loading JSON datasets
@@ -114,6 +116,49 @@ app.get("/", (req, res, next) => {
 app.get("/about", (req, res, next) => {
   res.render("about");
 });
+
+
+
+//-----------------------------------------
+app.get('/urls',
+  isLoggedIn,   // redirect to /login if user is not logged in
+  async (req,res,next) => {
+    try{
+      let userId = res.locals.user._id;  // get the user's id
+      let urls = await ShortUrl.find({userId:userId}); // lookup the user's todo items
+      res.locals.urls = urls;  //make the items available in the view
+      res.render("urls");  // render to the toDo page
+    } catch (e){
+      next(e);
+    }
+  }
+  )
+  app.post('/urls', isLoggedIn, async (req,res) => {
+    let userId = res.locals.user._id;
+    //check this user's usage, not let them post another url if they are past 100 url's to protect against nefarious purposes
+    const u = await User.findOne({_id: req.user.id})
+    await ShortUrl.create({userId:userId, full: req.body.fullUrl})
+    res.redirect('/urls')
+})
+
+app.get('/urls/:shortUrl', isLoggedIn, async (req, res) => {
+  //get the short url from the db
+  const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl})
+  //if not found, send to error page
+  if(shortUrl == null){
+      return res.render('error')
+  } 
+  //else increase click count
+  shortUrl.clicks++
+  //save new click count to db
+  shortUrl.save()
+  //redirect user to intended location using the full url
+  res.redirect(shortUrl.full)
+  })
+
+
+
+
 
 
 
