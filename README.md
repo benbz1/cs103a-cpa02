@@ -1,4 +1,4 @@
-# CS103a Express App Demo
+# CS103a Express App Demo - Short URL
 
 This project provides a URL shortener that can be used to save long url as short ones in your app.
 Video: https://brandeis.zoom.us/rec/share/s0U-gPGJj6iQK69MGn-ZYtfLjGfZDsXrfDTcIOIaC3UMgFQMb8lId62x9dQ3wZML.IdmUF7jf1yV9TXiW
