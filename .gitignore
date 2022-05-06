@@ -1,4 +1,3 @@
 node_modules
-CONNECTION_STRING = mongodb+srv://ben:123@cluster0.v4e5f.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 .env
 .DS_Store
